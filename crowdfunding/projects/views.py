@@ -38,7 +38,7 @@ class ProjectDetail(APIView):
     
     def get(self, request, pk):
         project = self.get_object(pk)
-        serializer = ProjectSerializer(project)
+        serializer = ProjectDetailSerializer(project)
         return Response(serializer.data)
 
 class PledgeList(APIView):
