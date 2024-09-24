@@ -7,6 +7,7 @@ class PledgeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProjectSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = apps.get_model('projects.Project')
         fields = '__all__'
