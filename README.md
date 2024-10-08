@@ -3,13 +3,13 @@ Fundee
 
 ## Planning:
 ### Concept/Name
-Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfunding without the crowd." It aims to reduce project saturation by allowing only a limited number of projects at any given time and capping funding requests at $150,000. This approach ensures that each project receives ample visibility and that backers can easily find and support initiatives they're passionate about without being overwhelmed by too many options.
+Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfunding without the crowd." It aims to reduce project saturation by allowing only a limited number of projects at any given time and capping funding requests at $100,000. This approach ensures that each project receives ample visibility and that backers can easily find and support initiatives they're passionate about without being overwhelmed by too many options.
 
 ### Intended Audience/User Stories
 
 **Intended Audience:**
 
-**Project Creators:** Individuals or small teams with creative, innovative, or entrepreneurial projects requiring up to $150,000 in funding. They are looking for a platform where their projects won't be lost in a sea of other campaigns.
+**Project Creators:** Individuals or small teams with creative, innovative, or entrepreneurial projects requiring up to $100,000 in funding. They are looking for a platform where their projects won't be lost in a sea of other campaigns.
 
 **Backers:** People interested in discovering and supporting unique projects without sifting through an oversaturated market. They appreciate a curated selection and enjoy being part of a community where their contributions make a significant impact.
 
@@ -54,15 +54,21 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
     - Offers a way for users to get in touch with customer support
 
 ### API Spec
-{{ Fill out the table below to define your endpoints. An example of what this might look like is shown at the bottom of the page. 
-
-It might look messy here in the PDF, but once it's rendered it looks very neat! 
-
-It can be helpful to keep the markdown preview open in VS Code so that you can see what you're typing more easily. }}
-
-| URL           | HTTP Method | Purpose             | Request Body | Success Response Code | Authentication/Authorisation |
-| --------------| ----------- | ------------------- | ------------ | --------------------- | ---------------------------- |
-| /register/    | POST        | Register a new user | User object  | 201 created           | Public                       |
+| URL           | HTTP Method | Purpose                     | Request Body | Success Response Code | Authentication/Authorisation        |
+| --------------| ----------- | --------------------------- | ------------ | --------------------- | ------------------------------------|
+| /register/    | POST        | Register a new user         | User object  | 201 Created           | Public                              |
+| /login/       | POST        | Log in an existing user     | User object  | 200 OK                | Public                              |
+| /logout/      | POST        | Log out the current user    | User object  | 200 OK                | Authenticated Users                 |
+| /users/:id    | GET         | Retrieve user profile by id |              | 200 OK                | Authenticated Users (Owner or Admin)|
+| /users/:id    | PUT         | Update user profile by id   |              | 200 OK                | Authenticated Users (Owner)         |
+| /users/:id    | DELETE      | Delete user account by id   |              | 200 OK                | Authenticated Users (Owner)         |
+|     |             |         |              |                       |                              |
+|     |             |         |              |                       |                              |
+|     |             |         |              |                       |                              |
+|     |             |         |              |                       |                              |
+|     |             |         |              |                       |                              |
+|     |             |         |              |                       |                              |
+|     |             |         |              |                       |                              |
 |     |             |         |              |                       |                              |
 |     |             |         |              |                       |                              |
 |     |             |         |              |                       |                              |
