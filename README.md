@@ -15,12 +15,12 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
 
 **User Stories:**
 
-**As a project creator**, I want to submit my project for approval so that it can be featured on Fundee and reach potential backers.
-**As a backer**, I want to browse a curated list of projects so that I can find and support initiatives that interest me.
-**As a backer**, I want to pledge money to a project and select a reward tier so that I can support creators and receive exclusive perks.
-**As a project creator**, I want to provide updates to my backers so that they stay informed about the project's progress.
-**As a user**, I want to create a profile so that I can manage my projects or backing activities in one place.
-**As a backer**, I want to receive notifications about project updates or messages from creators I support.
+- **As a project creator**, I want to submit my project for approval so that it can be featured on Fundee and reach potential backers.
+- **As a backer**, I want to browse a curated list of projects so that I can find and support initiatives that interest me.
+- **As a backer**, I want to pledge money to a project and select a reward tier so that I can support creators and receive exclusive perks.
+- **As a project creator**, I want to provide updates to my backers so that they stay informed about the project's progress.
+- **As a user**, I want to create a profile so that I can manage my projects or backing activities in one place.
+- **As a backer**, I want to receive notifications about project updates or messages from creators I support.
 
 ### Front End Pages/Functionality
 - **Home Page**
