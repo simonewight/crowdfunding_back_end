@@ -43,7 +43,7 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
     - **For Backers:**
         - Displays backed projects and their statuses
         - Shows messages and updates from creators
-    **For Creators:**
+    - **For Creators:**
         - Allows submission of new projects for approval
         - Displays statistics on active projects (e.g., funds raised, number of backers)
         - Provides tools to post updates and interact with backers
