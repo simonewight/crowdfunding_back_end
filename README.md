@@ -63,7 +63,8 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
 | /users/:id    | GET         | Retrieve user profile by id | N/A          | 200 OK                | Authenticated Users (Owner or Admin)|
 | /users/:id    | PUT         | Update user profile by id   | User object  | 200 OK                | Authenticated Users (Owner)         |
 | /users/:id    | DELETE      | Delete user account by id   | N/A          | 200 OK                | Authenticated Users (Owner)         |
-|     |             |         |              |                       |                              |
+| **Projects Management**
+| /projects/    | GET         | Retrieve a list of all live projects        | N/A             | 200 OK                      | Public                             |
 |     |             |         |              |                       |                              |
 |     |             |         |              |                       |                              |
 |     |             |         |              |                       |                              |
