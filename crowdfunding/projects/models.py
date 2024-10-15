@@ -31,3 +31,5 @@ class Pledge(models.Model):
       on_delete=models.CASCADE,
       related_name='pledges'
    )
+
+   reward = ##this is where you can leave your rewards tiers
