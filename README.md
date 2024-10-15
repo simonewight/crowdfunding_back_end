@@ -57,9 +57,8 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
 | URL           | HTTP Method | Purpose                     | Request Body | Success Response Code | Authentication/Authorisation        |
 | --------------| ----------- | --------------------------- | ------------ | --------------------- | ------------------------------------|
 | **User Authentication & Management**
-| /register/    | POST        | Register a new user         | User object  | 201 Created           | Public                              |
-| /login/       | POST        | Log in an existing user     | User object  | 200 OK                | Public                              |
-| /logout/      | POST        | Log out the current user    | User object  | 200 OK                | Authenticated Users                 |
+| /users/    | POST        | Register a new user         | User object  | 201 Created           | Public                              |
+| /users/       | POST        | Log in an existing user     | User object  | 200 OK                | Public                              |
 | /users/:id    | GET         | Retrieve user profile by id | N/A          | 200 OK                | Authenticated Users (Owner or Admin)|
 | /users/:id    | PUT         | Update user profile by id   | User object  | 200 OK                | Authenticated Users (Owner)         |
 | /users/:id    | DELETE      | Delete user account by id   | N/A          | 200 OK                | Authenticated Users (Owner)         |

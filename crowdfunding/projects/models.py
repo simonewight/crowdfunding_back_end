@@ -32,4 +32,4 @@ class Pledge(models.Model):
       related_name='pledges'
    )
 
-   reward = ##this is where you can leave your rewards tiers
+   ##reward = ##this is where you can leave your rewards tiers.##
