@@ -54,8 +54,6 @@ class CustomUserDetail(APIView):
     
     def patch(self, request, pk):
         user = self.get_object(pk)
-        if request.user != user:
-            return Response({'error': 'You do not have permission to edit this user.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = CustomUserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
