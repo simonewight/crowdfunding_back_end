@@ -71,7 +71,7 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
 | /projects/:id | DELETE      | Delete a project                     | N/A            | 200 OK     | Authenticated Creator (Owner)       |
 | **Pledges Management**
 | /projects/:id/pledges | GET | Retrieve all pledges for a project   | N/A            | 200 OK     | Authenticated Users (Project Owner) |
-| /projects/:id/pledges | POST| Make a pledge to a project           | Pledges object | 201 Created| Authenticated Users (Backers)       |
+| /projects/:id/pledges | POST| Make a pledge to a project           | { "amount", "anonymous" }  | 201 Created| Authenticated Users (Backers)       |
 | /projects/:id/pledges/:id   | GET    | Retrieve details of a specific pledge | N/A  | 200 OK     | Authenticated Users (Pledger or Owner)  |
 | /projects/:id/pledges/:id   | PUT    | Update a pledge (eg. change amount)   | { "amount", "anonymous" }     | 200 OK | Authenticated Users (Pledger)  |
 | /projects/:id/pledges/:id   | DELETE | Delete a pledge             | N/A     | 200 OK            | Authenticated Users (Pledger)           |
