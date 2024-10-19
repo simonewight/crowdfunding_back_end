@@ -56,3 +56,14 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': user.id,
             'email': user.email
         })
+    
+    def put(self, request, pk):
+        user = self.get_object(pk)
+        data = request.data.copy()
+        data.pop('username', None)
+        data.pop('password', None)
+        serializer = CustomUserSerializer(user, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
