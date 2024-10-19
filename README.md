@@ -59,21 +59,22 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
 | **User Authentication & Management**
 | /users/       | POST        | Register a new user         | { "username", "email", "password" }        | 201 Created | Public                |
 | /users/       | GET         | Retrieve a list of users    | N/A          | 200 OK                | Authenticated Users (Admin)         |
-| /users/       | PATCH       | 
 | /users/:id    | GET         | Retrieve user profile by id | N/A          | 200 OK                | Authenticated Users (Owner or Admin)|
 | /users/:id    | PUT         | Update user profile by id   | { "username", "email", "first_name", "last_name", "password" }             | 200 OK              | Authenticated Users (Owner)         |
+| /users/:id    | PATCH       | Partially update user profile by id | { "username", "email", "first_name", "last_name", "password" }     | 200
+OK              | Authenticated Users (Owner)         | 
 | /users/:id    | DELETE      | Delete user account by id   | N/A          | 200 OK                | Authenticated Users (Owner)         |
 | **Projects Management**
 | /projects/    | GET         | Retrieve a list of all live projects | N/A | 200 OK                | Public                              |
-| /projects/    | POST        | Submit a new project for approval    | Project object | 201 Created| Authenticated Users                 |
+| /projects/    | POST        | Submit a new project for approval    | { "title", "description", "goal", "image", "end_date", "category"}| 201 Created| Authenticated Users                 |
 | /projects/:id | GET         | Retrieve info on a specific project  | N/A            | 200 OK     | Public                              |
-| /projects/:id | PUT         | Update project details               | Project object | 200 OK     | Authenticated Creator (Owner)       |
+| /projects/:id | PUT         | Update project details               | { "title", "description", "image" }  | 200 OK     | Authenticated Creator (Owner)       |
 | /projects/:id | DELETE      | Delete a project                     | N/A            | 200 OK     | Authenticated Creator (Owner)       |
 | **Pledges Management**
 | /projects/:id/pledges | GET | Retrieve all pledges for a project   | N/A            | 200 OK     | Authenticated Users (Project Owner) |
 | /projects/:id/pledges | POST| Make a pledge to a project           | Pledges object | 201 Created| Authenticated Users (Backers)       |
 | /projects/:id/pledges/:id   | GET    | Retrieve details of a specific pledge | N/A  | 200 OK     | Authenticated Users (Pledger or Owner)  |
-| /projects/:id/pledges/:id   | PUT    | Update a pledge (eg. change amount)   | Pledges object    | 200 OK | Authenticated Users (Pledger)  |
+| /projects/:id/pledges/:id   | PUT    | Update a pledge (eg. change amount)   | { "amount", "anonymous" }     | 200 OK | Authenticated Users (Pledger)  |
 | /projects/:id/pledges/:id   | DELETE | Delete a pledge             | N/A     | 200 OK            | Authenticated Users (Pledger)           |
 | /users/:id/pledges          | GET    | Retrieve all pledges made by a user   | N/A  | 200 OK     | Authenticated Users (Owner)             |
 
