@@ -29,7 +29,7 @@ class Pledge(models.Model):
    supporter = models.ForeignKey(
       get_user_model(),
       on_delete=models.CASCADE,
-      related_name='pledges'
+      related_name='pledges', null=True, blank=True
    )
 
    ##reward = ##this is where you can leave your rewards tiers.##

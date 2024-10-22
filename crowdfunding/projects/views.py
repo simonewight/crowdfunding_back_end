@@ -79,9 +79,11 @@ class PledgeList(APIView):
         return Response(serializer.data)
     
     def post(self, request):
+        #data = request.data.copy()
+        #data["supporter"] = request.user.id
         serializer = PledgeSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(supporter = request.user)
             return Response(
                 serializer.data,
                 status=status.HTTP_201_CREATED
