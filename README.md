@@ -78,4 +78,6 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
 | /users/:id/pledges          | GET    | Retrieve all pledges made by a user   | N/A  | 200 OK     | Authenticated Users (Owner)             |
 
 ### DB Schema
-![!\[\]( {{ ./relative/path/to/your/schema/image.png }} )] (https://github.com/simonewight/crowdfunding_back_end/blob/main/Fundee-Schema.svg)
+![Database Schema](https://github.com/simonewight/crowdfunding_back_end/blob/main/Fundee-Schema.svg)
+
+
