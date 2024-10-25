@@ -113,3 +113,16 @@ class PledgeDetail(APIView):
         pledge = self.get_object(pk)
         pledge.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class ProjectPledgeList(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, pk):
+        try:
+            project = Project.objects.get(pk=pk)
+        except Project.DoesNotExist:
+            raise Http404
+
+        pledges = Pledge.objects.filter(project=project)
+        serializer = PledgeSerializer(pledges, many=True)
+        return Response(serializer.data)
