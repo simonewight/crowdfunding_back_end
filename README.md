@@ -83,7 +83,7 @@ Fundee is a fun, approachable crowdfunding platform with the tagline "crowdfundi
 https://fundee-app-8581d7ef280c.herokuapp.com/
 
 ### A screenshot of Insomnia, demonstrating a successful GET method for any endpoint
-Local: 
+![local](https://github.com/simonewight/crowdfunding_back_end/blob/main/screenshots/fundee-local-POST-register-new-user.png)
 
 ### A screenshot of Insomnia, demonstrating a successful POST method for any endpoint
 
