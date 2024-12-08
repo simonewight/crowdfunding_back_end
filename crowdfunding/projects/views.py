@@ -4,46 +4,43 @@ from django.db.models import Prefetch, Sum, Count
 from .models import Project, Pledge
 from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
 from .permissions import IsOwnerOrReadOnly
-import logging
-import traceback
-
-logger = logging.getLogger(__name__)
 
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        try:
-            projects = Project.objects.all().order_by('-date_created')
-            logger.info(f"Found {projects.count()} projects")
-            return projects
-        except Exception as e:
-            logger.error(f"Error in get_queryset: {str(e)}")
-            logger.error(traceback.format_exc())
-            raise
-
-    def list(self, request, *args, **kwargs):
-        try:
-            queryset = self.get_queryset()
-            serializer = self.get_serializer(queryset, many=True)
-            logger.info(f"Serialized data: {serializer.data}")
-            return Response(serializer.data)
-        except Exception as e:
-            logger.error(f"Error in list: {str(e)}")
-            logger.error(traceback.format_exc())
-            raise
+        return Project.objects.annotate(
+            total_pledges=Sum('project_pledges__amount'),
+            pledges_count=Count('project_pledges')
+        ).prefetch_related(
+            Prefetch(
+                'project_pledges',
+                queryset=Pledge.objects.select_related('supporter')
+            )
+        ).order_by('-date_created')
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Project.objects.all()
-    serializer_class = ProjectDetailSerializer
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly
     ]
+
+    def get_queryset(self):
+        return Project.objects.annotate(
+            total_pledges=Sum('project_pledges__amount'),
+            pledges_count=Count('project_pledges')
+        ).prefetch_related(
+            Prefetch(
+                'project_pledges',
+                queryset=Pledge.objects.select_related('supporter')
+            )
+        )
+
+    serializer_class = ProjectDetailSerializer
 
 class PledgeList(generics.ListCreateAPIView):
     queryset = Pledge.objects.all()
