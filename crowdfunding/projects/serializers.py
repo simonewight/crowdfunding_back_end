@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from django.db.models import Sum
-from django.contrib.auth import get_user_model
 from .models import Project, Pledge
+import logging
+
+logger = logging.getLogger(__name__)
 
 class PledgeSerializer(serializers.ModelSerializer):
     supporter_username = serializers.ReadOnlyField(source='supporter.username')
@@ -23,16 +24,15 @@ class PledgeSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.id')
     owner_username = serializers.ReadOnlyField(source='owner.username')
-    total_pledges = serializers.IntegerField(read_only=True, default=0)
-    pledges_count = serializers.IntegerField(read_only=True, default=0)
-    pledges = PledgeSerializer(many=True, read_only=True, source='project_pledges')
 
     def to_representation(self, instance):
-        data = super().to_representation(instance)
-        # Ensure total_pledges is at least 0
-        data['total_pledges'] = data.get('total_pledges', 0) or 0
-        data['pledges_count'] = data.get('pledges_count', 0) or 0
-        return data
+        try:
+            data = super().to_representation(instance)
+            logger.info(f"Serialized project {instance.id}: {data}")
+            return data
+        except Exception as e:
+            logger.error(f"Error serializing project {instance.id}: {str(e)}")
+            raise
 
     class Meta:
         model = Project
@@ -45,13 +45,12 @@ class ProjectSerializer(serializers.ModelSerializer):
             'is_open',
             'date_created',
             'owner',
-            'owner_username',
-            'total_pledges',
-            'pledges_count',
-            'pledges'
+            'owner_username'
         ]
 
 class ProjectDetailSerializer(ProjectSerializer):
+    pledges = PledgeSerializer(many=True, read_only=True, source='project_pledges')
+
     class Meta:
         model = Project
-        fields = ProjectSerializer.Meta.fields
+        fields = ProjectSerializer.Meta.fields + ['pledges']

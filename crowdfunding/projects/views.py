@@ -1,34 +1,38 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from django.db.models import Prefetch, Sum, Count, F
+from django.db.models import Prefetch, Sum, Count
 from .models import Project, Pledge
 from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
 from .permissions import IsOwnerOrReadOnly
+import logging
+import traceback
+
+logger = logging.getLogger(__name__)
 
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return Project.objects.annotate(
-            total_pledges=Sum('project_pledges__amount', default=0),
-            pledges_count=Count('project_pledges', distinct=True)
-        ).prefetch_related(
-            Prefetch(
-                'project_pledges',
-                queryset=Pledge.objects.select_related('supporter')
-            )
-        ).order_by('-date_created')
+        try:
+            projects = Project.objects.all().order_by('-date_created')
+            logger.info(f"Found {projects.count()} projects")
+            return projects
+        except Exception as e:
+            logger.error(f"Error in get_queryset: {str(e)}")
+            logger.error(traceback.format_exc())
+            raise
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['include_pledges'] = True
-        return context
-
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        print("Response data:", response.data)
-        return response
+    def list(self, request, *args, **kwargs):
+        try:
+            queryset = self.get_queryset()
+            serializer = self.get_serializer(queryset, many=True)
+            logger.info(f"Serialized data: {serializer.data}")
+            return Response(serializer.data)
+        except Exception as e:
+            logger.error(f"Error in list: {str(e)}")
+            logger.error(traceback.format_exc())
+            raise
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -40,11 +44,6 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly
     ]
-
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-        return response
 
 class PledgeList(generics.ListCreateAPIView):
     queryset = Pledge.objects.all()
