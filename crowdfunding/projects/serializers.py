@@ -21,9 +21,15 @@ class PledgeSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.id')
     owner_username = serializers.ReadOnlyField(source='owner.username')
-    total_pledges = serializers.IntegerField(read_only=True)
-    pledges_count = serializers.IntegerField(read_only=True)
+    total_pledges = serializers.SerializerMethodField()
+    pledges_count = serializers.SerializerMethodField()
     pledges = PledgeSerializer(many=True, read_only=True, source='project_pledges')
+
+    def get_total_pledges(self, obj):
+        return obj.get_total_pledges()
+
+    def get_pledges_count(self, obj):
+        return obj.get_pledges_count()
 
     class Meta:
         model = Project

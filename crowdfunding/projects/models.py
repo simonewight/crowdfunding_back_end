@@ -14,15 +14,15 @@ class Project(models.Model):
         related_name='owner_projects'
     )
 
-    @property
-    def total_pledges(self):
-        return self.project_pledges.aggregate(
-            total=models.Sum('amount')
-        )['total'] or 0
+    def get_total_pledges(self):
+        return self.project_pledges.aggregate(total=models.Sum('amount'))['total'] or 0
+
+    def get_pledges_count(self):
+        return self.project_pledges.count()
 
 class Pledge(models.Model):
     amount = models.IntegerField()
-    comment = models.CharField(max_length=200, blank=True, null=True)  # Made optional
+    comment = models.CharField(max_length=200)
     anonymous = models.BooleanField()
     project = models.ForeignKey(
         'Project',
