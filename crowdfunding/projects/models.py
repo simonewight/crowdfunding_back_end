@@ -4,9 +4,9 @@ from django.utils import timezone
 
 class Project(models.Model):
     CATEGORY_CHOICES = [
-        ('Games', 'Games'),
+        ('Arts', 'Arts'),
         ('Music', 'Music'),
-        ('Art', 'Art'),
+        ('Games', 'Games'),
         ('Tech', 'Tech'),
         ('Film', 'Film'),
     ]
