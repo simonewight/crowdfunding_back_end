@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from datetime import date
 
 class Project(models.Model):
     title = models.CharField(max_length=200)
@@ -9,7 +10,7 @@ class Project(models.Model):
     image = models.URLField()
     is_open = models.BooleanField()
     date_created = models.DateTimeField(default=timezone.now)
-    date_end = models.DateField()
+    date_end = models.DateField(default=date(2024, 12, 31))  # Add default here
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
