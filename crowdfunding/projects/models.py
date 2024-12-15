@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime, date
 
 class Project(models.Model):
     title = models.CharField(max_length=200)
@@ -22,16 +22,9 @@ class Project(models.Model):
         if not self.date_end:
             return 0
         
-        # Convert date_end to datetime if it's just a date
-        if isinstance(self.date_end, datetime):
-            end_date = self.date_end
-        else:
-            end_date = datetime.combine(self.date_end, datetime.max.time())
-            
-        now = timezone.now()
-        difference = end_date - now
-        days_remaining = difference.days + (difference.seconds / 86400)
-        return max(0, round(days_remaining))
+        today = date.today()
+        difference = self.date_end - today
+        return max(0, difference.days)
 
 class Pledge(models.Model):
     amount = models.IntegerField()
