@@ -1,9 +1,17 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Project, Pledge
+from datetime import datetime
+
+class DateTimeFieldWithoutTZ(serializers.DateTimeField):
+    def to_representation(self, value):
+        if value:
+            return value.strftime('%Y-%m-%d %H:%M:%S')
+        return None
 
 class PledgeSerializer(serializers.ModelSerializer):
     supporter_username = serializers.ReadOnlyField(source='supporter.username')
+    date_created = DateTimeFieldWithoutTZ()
 
     class Meta:
         model = Pledge
@@ -15,14 +23,13 @@ class ProjectSerializer(serializers.ModelSerializer):
     pledges = PledgeSerializer(many=True, read_only=True)
     total_pledges = serializers.SerializerMethodField()
     pledges_count = serializers.SerializerMethodField()
-    days_remaining = serializers.SerializerMethodField()
+    date_created = DateTimeFieldWithoutTZ()
 
     class Meta:
         model = Project
         fields = ['id', 'title', 'description', 'goal', 'image', 'is_open', 
                  'date_created', 'date_end', 'owner', 'owner_username', 
-                 'pledges', 'category', 'total_pledges', 'pledges_count',
-                 'days_remaining']
+                 'pledges', 'category', 'total_pledges', 'pledges_count']
         read_only_fields = ['id', 'owner', 'date_created']
 
     def get_total_pledges(self, obj):
@@ -30,9 +37,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_pledges_count(self, obj):
         return obj.pledges.count()
-
-    def get_days_remaining(self, obj):
-        return obj.get_days_remaining()
 
 class ProjectDetailSerializer(ProjectSerializer):
     def update(self, instance, validated_data):
