@@ -8,6 +8,7 @@ class Project(models.Model):
     image = models.URLField()
     is_open = models.BooleanField()
     date_created = models.DateTimeField(auto_now_add=True)
+    date_end = models.DateTimeField(null=True, blank=True)  # New field
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
@@ -22,7 +23,7 @@ class Project(models.Model):
 
 class Pledge(models.Model):
     amount = models.IntegerField()
-    comment = models.CharField(max_length=200)
+    comment = models.CharField(max_length=200, blank=True)  # Modified this line
     anonymous = models.BooleanField()
     project = models.ForeignKey(
         'Project',

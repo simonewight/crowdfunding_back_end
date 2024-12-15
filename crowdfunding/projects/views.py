@@ -2,47 +2,59 @@ from rest_framework import generics, permissions
 from .models import Project, Pledge
 from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
 from .permissions import IsOwnerOrReadOnly
+from django.http import HttpResponse
+from rest_framework.response import Response
 
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return Project.objects.prefetch_related(
-            'project_pledges',
-            'project_pledges__supporter'
-        ).order_by('-date_created')
+        return Project.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        print("Received data:", self.request.data)  # Debug line
+        instance = serializer.save(owner=self.request.user)
+        print("Saved project:", instance.date_end)  # Debug line
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
-    ]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = ProjectDetailSerializer
-    queryset = Project.objects.prefetch_related(
-        'project_pledges',
-        'project_pledges__supporter'
-    )
+    queryset = Project.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        print("Project data:", instance.date_end)  # Debug line
+        print("Serialized data:", serializer.data)  # Debug line
+        return Response(serializer.data)
 
 class PledgeList(generics.ListCreateAPIView):
-    queryset = Pledge.objects.all()
     serializer_class = PledgeSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        return Pledge.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(supporter=self.request.user)
 
 class PledgeDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Pledge.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = PledgeSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-class ProjectPledgeList(generics.ListAPIView):
+    def get_queryset(self):
+        return Pledge.objects.all()
+
+class ProjectPledgeList(generics.ListCreateAPIView):
     serializer_class = PledgeSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return Pledge.objects.filter(project_id=self.kwargs.get('pk'))
+        project_id = self.kwargs['pk']
+        return Pledge.objects.filter(project_id=project_id)
+
+    def perform_create(self, serializer):
+        project_id = self.kwargs['pk']
+        project = Project.objects.get(id=project_id)
+        serializer.save(supporter=self.request.user, project=project)

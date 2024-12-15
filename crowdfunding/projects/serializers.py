@@ -24,12 +24,18 @@ class ProjectSerializer(serializers.ModelSerializer):
     total_pledges = serializers.SerializerMethodField()
     pledges_count = serializers.SerializerMethodField()
     pledges = PledgeSerializer(many=True, read_only=True, source='project_pledges')
-
+    
     def get_total_pledges(self, obj):
         return obj.get_total_pledges()
 
     def get_pledges_count(self, obj):
         return obj.get_pledges_count()
+
+    def create(self, validated_data):
+        print("Creating project with data:", validated_data)  # Debug line
+        instance = super().create(validated_data)
+        print("Created project with date_end:", instance.date_end)  # Debug line
+        return instance
 
     class Meta:
         model = Project
@@ -41,14 +47,17 @@ class ProjectSerializer(serializers.ModelSerializer):
             'image',
             'is_open',
             'date_created',
+            'date_end',
             'owner',
             'owner_username',
             'total_pledges',
             'pledges_count',
-            'pledges'
+            'pledges',
+            'category'
         ]
+        read_only_fields = ['id', 'date_created', 'owner']
 
 class ProjectDetailSerializer(ProjectSerializer):
     class Meta:
         model = Project
-        fields = ProjectSerializer.Meta.fields
+        fields = ProjectSerializer.Meta.fields  # Remove the + ['date_end'] since it's already in ProjectSerializer
