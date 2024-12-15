@@ -2,7 +2,6 @@ from rest_framework import generics, permissions
 from .models import Project, Pledge
 from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
 from .permissions import IsOwnerOrReadOnly
-from django.http import HttpResponse
 from rest_framework.response import Response
 
 class ProjectList(generics.ListCreateAPIView):
@@ -13,21 +12,12 @@ class ProjectList(generics.ListCreateAPIView):
         return Project.objects.all()
 
     def perform_create(self, serializer):
-        print("Received data:", self.request.data)  # Debug line
-        instance = serializer.save(owner=self.request.user)
-        print("Saved project:", instance.date_end)  # Debug line
+        serializer.save(owner=self.request.user)
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = ProjectDetailSerializer
     queryset = Project.objects.all()
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        print("Project data:", instance.date_end)  # Debug line
-        print("Serialized data:", serializer.data)  # Debug line
-        return Response(serializer.data)
 
 class PledgeList(generics.ListCreateAPIView):
     serializer_class = PledgeSerializer
