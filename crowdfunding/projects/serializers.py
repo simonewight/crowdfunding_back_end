@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Project, Pledge
+from datetime import datetime
 
 class PledgeSerializer(serializers.ModelSerializer):
     supporter_username = serializers.ReadOnlyField(source='supporter.username')
@@ -16,6 +17,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     total_pledges = serializers.SerializerMethodField()
     pledges_count = serializers.SerializerMethodField()
     days_remaining = serializers.SerializerMethodField()
+    date_created = serializers.DateTimeField(format="%Y-%m-%d")
+    date_end = serializers.DateField(format="%Y-%m-%d")
 
     class Meta:
         model = Project
@@ -33,7 +36,11 @@ class ProjectSerializer(serializers.ModelSerializer):
         return obj.pledges.count()
 
     def get_days_remaining(self, obj):
-        return obj.get_days_remaining()
+        if not obj.date_end:
+            return 0
+        today = datetime.now().date()
+        delta = obj.date_end - today
+        return max(0, delta.days)
 
 class ProjectDetailSerializer(ProjectSerializer):
     pledges = PledgeSerializer(many=True, read_only=True)
