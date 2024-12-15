@@ -24,13 +24,16 @@ class ProjectSerializer(serializers.ModelSerializer):
     total_pledges = serializers.SerializerMethodField()
     pledges_count = serializers.SerializerMethodField()
     pledges = PledgeSerializer(many=True, read_only=True, source='project_pledges')
-    date_end = serializers.DateTimeField(format="%Y-%m-%d", required=False, allow_null=True)
+    days_remaining = serializers.SerializerMethodField()
 
     def get_total_pledges(self, obj):
         return obj.get_total_pledges()
 
     def get_pledges_count(self, obj):
         return obj.get_pledges_count()
+
+    def get_days_remaining(self, obj):
+        return obj.get_days_remaining()
 
     class Meta:
         model = Project
@@ -48,7 +51,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'total_pledges',
             'pledges_count',
             'pledges',
-            'category'
+            'category',
+            'days_remaining'
         ]
         read_only_fields = ['id', 'date_created', 'owner']
 

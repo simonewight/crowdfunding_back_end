@@ -42,7 +42,7 @@ class ProjectPledgeList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         project_id = self.kwargs['pk']
-        return Pledge.objects.filter(project_id=project_id)
+        return Project.objects.all().order_by('-date_created')  # Add this order_by
 
     def perform_create(self, serializer):
         project_id = self.kwargs['pk']

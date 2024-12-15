@@ -41,6 +41,14 @@ class Project(models.Model):
     def get_pledges_count(self):
         return self.project_pledges.count()
 
+    def get_days_remaining(self):
+        if self.date_end:
+            now = timezone.now()
+            time_left = self.date_end - now
+            days_left = time_left.days
+            return max(0, days_left)  # Don't return negative days
+        return 0
+
 class Pledge(models.Model):
     amount = models.IntegerField()
     comment = models.CharField(max_length=200)
